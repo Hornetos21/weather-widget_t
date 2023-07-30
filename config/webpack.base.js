@@ -44,23 +44,15 @@ module.exports = {
             ],
           },
         },
-        // plugins: '@babel/transform-runtime',
-        // overrides: [
-        //   { test: /\.vue$/, plugins: ['@babel/transform-typescript'] },
-        // ],
-        // use: {
-
-        // options: {
-        //   presets: [
-        //     [
-        //       '@babel/transform-typescript',
-        //       {
-        //         allExtensions: true,
-        //       },
-        //     ],
-        //   ],
-        // },
-        // },
+      },
+      /*      {
+        test: /\.svg$/,
+        use: ['babel-loader', 'vue-svg-loader'],
+      },*/
+      // css
+      {
+        test: /.css$/,
+        use: 'css-loader',
       },
 
       // files
@@ -72,10 +64,11 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json', '.scss'],
-    // modules: ['node_modules'],
+    modules: [path.resolve(__base, 'src'), 'node_modules'],
     alias: {
       '@': path.resolve(__base, 'src'),
     },
+    preferAbsolute: true,
   },
 
   output: {

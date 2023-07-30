@@ -1,12 +1,13 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import components from './components/ui/index'
+// Custom element
+import { defineCustomElement } from 'vue'
+import WeatherWidget from './WeatherWidget.ce.vue'
 
-console.log(components)
+const Widget = defineCustomElement(WeatherWidget)
 
-const app = createApp(App)
+customElements.define('weather-widget', Widget)
 
-components.forEach((comp) => app.component(comp.name, comp))
-
-// app.mount('#app')
-createApp(App).mount('#app')
+// declare module 'vue' {
+//   export interface GlobalComponent {
+//     Widget: typeof Widget
+//   }
+// }

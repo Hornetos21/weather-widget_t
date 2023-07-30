@@ -8,15 +8,15 @@ module.exports = merge(base, {
 
   // DEV SERVER CONFIG
   devServer: {
-    // static: './dist',
     hot: true,
     port: 3000,
+    compress: true,
   },
   module: {
     rules: [
       {
         test: /\.s[ac]ss$/i,
-        use: ['vue-style-loader', 'css-loader', 'sass-loader'],
+        use: ['sass-loader'],
       },
     ],
   },
