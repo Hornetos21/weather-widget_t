@@ -1,10 +1,14 @@
 // Custom element
-import { defineCustomElement } from 'vue'
-import WeatherWidget from './WeatherWidget.ce.vue'
+import { createApp, defineCustomElement } from 'vue'
+import WeatherWidget from './WeatherWidget.vue'
 
-const Widget = defineCustomElement(WeatherWidget)
+// const Widget = defineCustomElement(WeatherWidget)
+//
+// customElements.define('weather-widget', Widget)
 
-customElements.define('weather-widget', Widget)
+const app = createApp(WeatherWidget)
+
+app.mount('#app')
 
 // declare module 'vue' {
 //   export interface GlobalComponent {

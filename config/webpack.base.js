@@ -18,7 +18,6 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
-      // favicon: path.resolve(__src, 'assets', 'favicon.ico'),
       template: path.resolve(__base, 'public', 'index.html'),
     }),
   ],
@@ -44,15 +43,6 @@ module.exports = {
             ],
           },
         },
-      },
-      /*      {
-        test: /\.svg$/,
-        use: ['babel-loader', 'vue-svg-loader'],
-      },*/
-      // css
-      {
-        test: /.css$/,
-        use: 'css-loader',
       },
 
       // files

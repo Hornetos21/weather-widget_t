@@ -1,6 +1,6 @@
 <template>
   <svg
-    class="feather feather-trash-2"
+    class="icon"
     fill="none"
     height="30"
     stroke="currentColor"

@@ -9,14 +9,14 @@ module.exports = merge(base, {
   // DEV SERVER CONFIG
   devServer: {
     hot: true,
-    port: 3000,
+    port: 3030,
     compress: true,
   },
   module: {
     rules: [
       {
         test: /\.s[ac]ss$/i,
-        use: ['sass-loader'],
+        use: ['vue-style-loader', 'css-loader', 'sass-loader'],
       },
     ],
   },

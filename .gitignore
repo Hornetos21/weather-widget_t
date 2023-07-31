@@ -6,3 +6,5 @@ build
 
 logs
 *.log
+.env.local
+.env.*.local

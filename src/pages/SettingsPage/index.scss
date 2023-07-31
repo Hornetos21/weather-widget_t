@@ -1,0 +1,85 @@
+// SETTINGS PAGE
+.settings-container {
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  label {
+    width: 102px;
+  }
+}
+.form-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 10px;
+
+  .wrapper-input {
+    position: relative;
+    flex-grow: 1;
+  }
+
+  input {
+    padding: 10px;
+    height: 46px;
+    font-size: inherit;
+    width: 100%;
+
+    border-radius: 4px;
+    border: 2px solid black;
+
+    &:focus {
+      border-color: transparent;
+      outline-color: #1a86d8;
+    }
+  }
+}
+.settings-list {
+  margin-bottom: 60px;
+
+  li {
+    display: flex;
+    gap: 10px;
+    background-color: #edebe9;
+    align-items: center;
+
+    padding: 15px 10px;
+    border-radius: 4px;
+
+    &:not(&:last-child) {
+      margin-bottom: 30px;
+    }
+    button {
+      margin-left: auto;
+    }
+  }
+}
+.search-list {
+  position: absolute;
+  width: 100%;
+  border: 1px solid grey;
+  border-radius: 4px;
+  overflow: hidden;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+
+    background-color: #edebe9;
+
+    cursor: pointer;
+
+    &:hover {
+      background-color: aliceblue;
+    }
+
+    &:not(&:last-child) {
+      border-bottom: 1px solid black;
+    }
+  }
+}

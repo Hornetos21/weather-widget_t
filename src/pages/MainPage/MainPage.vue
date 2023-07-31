@@ -1,13 +1,7 @@
 <template>
   <div class="weather-container">
-    <button class="settings-btn" @click="toggleMode">
-      <CloseIcon v-if="isSettingsMode" />
-      <GearIcon />
-    </button>
-
     <ul class="weather-list">
-      <WeatherCard />
-      <WeatherCard />
+      <WeatherCard v-for="city in cities" :key="city.id" :city="city" />
     </ul>
   </div>
 </template>
@@ -26,12 +20,8 @@ export default defineComponent({
     WeatherCard,
   },
   props: {
-    isSettingsMode: {
-      type: Boolean,
-      required: true,
-    },
-    toggleMode: {
-      type: Function,
+    cities: {
+      type: Array,
       required: true,
     },
   },

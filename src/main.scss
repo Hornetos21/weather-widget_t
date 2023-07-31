@@ -1,18 +1,76 @@
 // COMMON
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
-
+ul {
+  list-style: none;
+}
+.root {
+  font-size: 62.5%;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
 .widget-container {
   position: relative;
-  max-width: 425px;
+  max-width: 375px;
   min-width: 320px;
-  font-size: 62.5%;
-  //font-size: 1.6em;
 
-  padding: 26px;
+  border: 2px solid black;
+  border-radius: 4px;
+
+  font-size: 1.6em;
+
+  padding: 0 26px 10px;
 }
+
+.title {
+  font-size: inherit;
+  font-weight: 600;
+}
+.header {
+  display: flex;
+  align-items: center;
+  padding: 26px 0;
+}
+.block {
+  padding: 20px 0;
+}
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 30px;
+  width: 30px;
+
+  background: none;
+  border: none;
+
+  cursor: pointer;
+
+  &--toggle {
+    position: absolute;
+    right: 25px;
+    top: 25px;
+  }
+
+  .icon {
+    color: black;
+    transition: color 0.2s;
+    &:hover {
+      color: darkcyan;
+    }
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
 @import '@/pages/MainPage';
+@import '@/pages/SettingsPage';
 @import '@/components/WeatherCard';

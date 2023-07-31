@@ -1,31 +1,7 @@
 // MAIN PAGE
 
 .weather-container {
-  font-size: 1.6em;
 }
 
 .weather-list {
-  list-style: none;
-}
-
-.settings-btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  position: absolute;
-  height: 30px;
-  width: 30px;
-
-  right: 25px;
-  top: 25px;
-
-  background: none;
-  border: none;
-
-  cursor: pointer;
-
-  img {
-    width: 100%;
-  }
 }
