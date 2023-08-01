@@ -8,8 +8,8 @@ export const extractLocalCityWeather = (
   country: cityWeather.sys.country,
   coords: cityWeather.coord,
   main: {
-    temp: cityWeather.main.temp,
-    feels: cityWeather.main.feels_like,
+    temp: Math.round(cityWeather.main.temp),
+    feels: Math.round(cityWeather.main.feels_like),
     main: cityWeather.weather[0].main,
     description: cityWeather.weather[0].description,
     clouds: cityWeather.clouds.all,
@@ -19,7 +19,6 @@ export const extractLocalCityWeather = (
     humidity: cityWeather.main.humidity,
     pressure: cityWeather.main.pressure,
     wind: cityWeather.wind,
-    dt: cityWeather.dt,
     visibility: cityWeather.visibility,
   },
 })
