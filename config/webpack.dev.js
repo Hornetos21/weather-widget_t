@@ -9,7 +9,7 @@ module.exports = merge(base, {
   // DEV SERVER CONFIG
   devServer: {
     hot: true,
-    port: 3030,
+    port: 3000,
     compress: true,
   },
   module: {

@@ -19,9 +19,9 @@ export const getWeatherByLocation = async (
 export const getCoordinatesByCityName = async (
   name: string,
   limit = 5
-): Promise<CoordinatesByName> => {
+): Promise<CoordinatesByName[]> => {
   const response = await fetch(
-    `${urlApi}geo/1.0/direct?q${name}&limit=${limit}&appid=${apiKey}`
+    `${urlApi}geo/1.0/direct?q=${name}&limit=${limit}&appid=${apiKey}`
   )
   return response.json()
 }

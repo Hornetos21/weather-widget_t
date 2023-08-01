@@ -10,14 +10,17 @@ ul {
   list-style: none;
 }
 .root {
+  max-width: 375px;
+  min-width: 320px;
+
   font-size: 62.5%;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
+
+  background: #e4e4e4;
 }
 .widget-container {
   position: relative;
-  max-width: 375px;
-  min-width: 320px;
 
   border: 2px solid black;
   border-radius: 4px;
@@ -34,10 +37,38 @@ ul {
 .header {
   display: flex;
   align-items: center;
-  padding: 26px 0;
+  height: 75px;
+
+  &--message {
+    height: 40px;
+    margin-bottom: 15px;
+  }
 }
+.spinner {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  backdrop-filter: blur(4px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .block {
-  padding: 20px 0;
+  padding: 10px;
+  background: #fbfbfb;
+  border-radius: 4px;
+
+  &--alert {
+    margin-top: 75px;
+  }
+
+  p {
+    padding: 0 15px;
+  }
 }
 .btn {
   display: flex;

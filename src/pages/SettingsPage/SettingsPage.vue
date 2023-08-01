@@ -3,8 +3,8 @@
     <header class="header">
       <h2 class="title">Settings</h2>
     </header>
-    <SettingsList :cities="cities" />
-    <SettingsForm :cities="cities" />
+    <SettingsList :cities="cities" @remove="removeCity" />
+    <SettingsForm :cities="cities" @select="fetchAndAdd" />
   </div>
 </template>
 
@@ -22,8 +22,21 @@ export default defineComponent({
       type: Array,
       required: true,
     },
+    removeCity: {
+      type: Function,
+    },
+    fetchAndAdd: {
+      type: Function,
+    },
   },
+  // methods: {
+  //   remove(city) {
+  //     removeCity()
+  //   },
+  // },
 })
 </script>
 
 <style lang="scss"></style>
+
+<!--el.id !== city.id-->

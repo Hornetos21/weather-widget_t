@@ -37,7 +37,6 @@ export interface OpenWeatherAPI {
   clouds: {
     all: number
   }
-  dt: number
 }
 interface CityMainWeather extends Omit<MainWeather, 'id'> {
   clouds: number
@@ -49,7 +48,6 @@ interface CityDetailWeather {
   pressure: number
   humidity: number
   wind: WindDetail
-  dt: number
   visibility: number
 }
 export interface CityWeather {
