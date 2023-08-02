@@ -14,7 +14,7 @@
           <li
             class="search-list__item"
             v-for="city in searchList"
-            @click="addLocation(city)"
+            @click="addLocation(_, city)"
           >
             {{ city.name }}, {{ city.country }}
             <PlusIcon />
@@ -34,7 +34,7 @@ import TheButton from './ui/TheButton.vue'
 import PlusIcon from './ui/icons/PlusIcon.vue'
 import { CoordinatesByName } from '../types'
 import { debounce } from '../helpers/debounce'
-import { getCoordinatesByCityName } from '../api/OpenWeatherApi'
+import { getCoordinatesByCityName } from '../services/api/OpenWeatherApi'
 
 export default {
   components: { PlusIcon, TheButton, EnterArrow },
@@ -63,19 +63,23 @@ export default {
         console.error(e.message)
       }
     },
-    addLocation(city) {
-      // console.log(city)
-      this.$emit('select', city)
+    addLocation(event, city) {
+      if (event.type === 'submit') {
+        if (this.searchList.length) {
+          this.$emit('select', this.searchList[0])
+        } else {
+          this.$emit('error', "Couldn't find the city.")
+        }
+      } else {
+        this.$emit('select', city)
+      }
+
       this.searchList = []
       this.searchCity = ''
-
-      // this.$emit('')
     },
-
-    // performSearch: debounce(this.fetchCityNames),
   },
   created() {
-    this.debouncedFetch = debounce(this.fetchCityNames)
+    this.debouncedFetch = debounce(this.fetchCityNames, 200)
   },
 
   watch: {

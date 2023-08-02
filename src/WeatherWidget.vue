@@ -1,45 +1,47 @@
 <template>
   <div class="root">
     <div class="widget-container">
-      <!--      BUTTON -->
-
       <the-button class="btn--toggle" @click="toggleMode">
         <CloseIcon v-if="isSettingsMode" />
         <GearIcon v-else />
       </the-button>
 
-      <!--     MESSAGE -->
+      <!--      <div class="skeleton"></div>-->
 
-      <div v-if="!isLoading && !cities.length && !isSettingsMode">
-        <div class="block block--alert">
-          <header class="header header--message">
-            <CodeOrange size="50" />
-            <h2 class="title">Message</h2>
-          </header>
-          <p>
-            {{ error || message }}
-          </p>
+      <!-- WEATHER -->
+      <div class="container" v-if="!isSettingsMode">
+        <Message v-if="!cities.length || error">
+          <template v-slot:icon>
+            <SpinnerIcon v-show="isLoading" />
+            <CodeOrange size="40" v-show="message && !error" />
+            <CodeRed size="40" v-show="error" />
+          </template>
+          <template v-slot:message>{{ error || message }}</template>
+        </Message>
+
+        <div class="spinner" v-if="isLoading">
+          <SpinnerIcon />
         </div>
+
+        <WeatherList
+          v-if="!isSettingsMode"
+          :cities="cities"
+          :toggle-mode="toggleMode"
+          :is-settings-mode="isSettingsMode"
+          :is-loading="isLoading"
+          :message="message"
+        />
       </div>
 
-      <!-- MAIN PAGE-->
-
-      <div class="spinner" v-if="isLoading">
-        <SpinnerIcon />
-      </div>
-
-      <MainPage
-        v-if="!isSettingsMode"
-        :cities="cities"
-        :toggle-mode="toggleMode"
-        :is-settings-mode="isSettingsMode"
-      />
-      <!--      SETTING PAGE-->
+      <!--      SETTING-->
       <SettingsPage
         :cities="cities"
         v-if="isSettingsMode"
         :removeCity="removeCity"
         :fetch-and-add="fetchAndAdd"
+        :is-settings-mode="isSettingsMode"
+        :showError="showError"
+        :error="error"
       />
     </div>
   </div>
@@ -47,46 +49,49 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import MainPage from './pages/MainPage/MainPage.vue'
 import SettingsPage from './pages/SettingsPage/SettingsPage.vue'
 import GearIcon from './components/ui/icons/GearIcon.vue'
 import CloseIcon from './components/ui/icons/CloseIcon.vue'
 import TheButton from './components/ui/TheButton.vue'
 import SpinnerIcon from './components/ui/icons/SpinnerIcon.vue'
 import CodeOrange from './components/ui/icons/CodeOrange.vue'
+import CodeRed from './components/ui/icons/CodeRed.vue'
 
+import { getWeatherByLocation } from './services/api/OpenWeatherApi'
 import {
-  getCoordinatesByCityName,
-  getWeatherByLocation,
-} from './api/OpenWeatherApi'
-import { getCurrentCoordinates } from './helpers/getCurrentLocation'
+  getCurrentCoordinates,
+  getCurrentPosition,
+} from './services/getCurrentLocation'
 import { extractLocalCityWeather } from './helpers/extractLocalCity'
-import { loadLocalStorage, saveLocalStorage } from './helpers/LocalStorage'
+import { loadLocalStorage, saveLocalStorage } from './services/LocalStorage'
 import { CityWeather } from './types'
+import WeatherList from './components/WeatherList.vue'
+import Message from './components/Message.vue'
 
 /*
- * Сделать таймер обновления данных о погоде
- *
- * Сообщения ошибок
- * Расположения спинера
- *
- *
+ * Поиск по городу обработка на клин и энтер
+ * Сообщения ошибок и спинер
+ * Проверить направление ветра а то показывает подозрительно на север
+ * Попробовать сохранять координаты в локалстор
+ * Попробовать генерировать айдишник при создании приложения сохранять его в локал
  * */
 
 export default defineComponent({
   components: {
+    CodeRed,
+    Message,
+    WeatherList,
     CodeOrange,
     SpinnerIcon,
     TheButton,
     CloseIcon,
     GearIcon,
     SettingsPage,
-    MainPage,
   },
 
   data() {
     return {
-      cities: [] as PropType<CityWeather[]>[],
+      cities: [],
       isSettingsMode: false,
       isLoading: false,
       timerId: null,
@@ -99,15 +104,14 @@ export default defineComponent({
     reorderCities() {},
     addCity() {},
     removeCity(city) {
-      console.log('test', city)
-      this.cities = this.cities.filter((el) => console.log(el))
+      this.cities = this.cities.filter((el) => el.id !== city.id)
     },
     toggleMode() {
       this.isSettingsMode = !this.isSettingsMode
     },
     showError(error: string) {
       this.error = error
-      setTimeout(() => (this.error = ''), 3000)
+      setTimeout(() => (this.error = ''), 2000)
     },
     updateWeather() {
       const updateTime = 5 * 60 * 1000
@@ -116,13 +120,11 @@ export default defineComponent({
     },
 
     async fetchWeatherByCurrentCoords() {
-      // !refactor
-      this.message = `Please click on the allow access to your location data button or add a city in the settings.`
-
       const res = await getCurrentCoordinates()
 
       if (typeof res === 'string') {
         this.error = res
+
         // !refactor
 
         setTimeout(() => {
@@ -132,7 +134,6 @@ export default defineComponent({
       } else {
         await this.fetchWeather(res)
       }
-      this.message = 'Add a city in the settings.'
     },
 
     async fetchWeather(coordinates?) {
@@ -159,31 +160,51 @@ export default defineComponent({
 
     async fetchAndAdd(cityName) {
       console.log(cityName)
+      const isExist = this.cities.some(
+        (el) => el.coords.lat.toFixed(2) === cityName.lat.toFixed(2)
+      )
+      if (isExist) {
+        return this.showError('This city is already on the list.')
+      } else {
+        try {
+          const cityWeather = await getWeatherByLocation(
+            cityName.lat,
+            cityName.lon
+          )
 
-      try {
-        // const cityCoords = await getCoordinatesByCityName(cityName)
-        const cityWeather = await getWeatherByLocation(
-          cityName.lat,
-          cityName.lon
-        )
-
-        this.cities.push(extractLocalCityWeather(cityWeather))
-      } catch (e) {
-        console.error(e.message)
-        this.showError('Failed to load city')
+          this.cities.push(extractLocalCityWeather(cityWeather))
+        } catch (e) {
+          console.error(e.message)
+          this.showError('Failed to load city')
+        }
       }
     },
   },
   async mounted() {
     this.cities = loadLocalStorage()
 
-    this.updateWeather()
+    // this.updateWeather()
 
     if (this.cities.length) {
+      // this.message = ''
       await this.fetchWeather()
     } else {
+      this.message = `Please click on the allow access to your location data button or add a city in the settings.`
+
       await this.fetchWeatherByCurrentCoords()
+
+      this.message = 'Add a city in the settings.'
     }
+  },
+  computed: {
+    // isExist(city) {
+    //   return this.cities.some((el) => el.id === city.id)
+    // },
+    /*    welcomePhase() {
+          return this.welcome
+            ? 'Please click on the allow access to your location data button or add a city in the settings.'
+            : 'Add a city in the settings.'
+        },*/
   },
   watch: {
     cities: {
@@ -192,6 +213,13 @@ export default defineComponent({
       },
       deep: true,
     },
+    /*message: {
+      handler() {
+        if (!this.cities.length) {
+          this.message = 'Add a city in the settings.'
+        }
+      },
+    },*/
   },
 })
 </script>
