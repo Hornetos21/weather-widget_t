@@ -1,8 +1,14 @@
-// CARD
-
+// WEATHER MAIN
+.weather-list {
+  //min-height: 526px;
+}
 .weather-card {
-  margin-bottom: 70px;
+  position: relative;
+  min-height: 526px;
+  //min-width: 320px;
+  //margin-bottom: 70px;
   &:not(&:first-child) {
+    margin-top: 70px;
     border-top: 2px solid black;
   }
 

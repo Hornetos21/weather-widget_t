@@ -1,8 +1,11 @@
 <template>
   <li class="weather-card">
-    <header class="header">
-      <h1 class="title city">{{ city.name }},{{ city.country }}</h1>
-    </header>
+    <div class="spinner" v-if="isLoading">
+      <SpinnerIcon />
+    </div>
+
+    <the-header> {{ city.name }},{{ city.country }}</the-header>
+
     <div class="main-info">
       <img
         :src="`https://openweathermap.org/img/wn/${city.main.icon}@2x.png`"
@@ -42,12 +45,18 @@ import { getWindDirection } from '../../helpers/getWindDirection'
 import { getWindPhrase } from '../../helpers/getWindPhrase'
 import { getCloudsPhrase } from '../../helpers/getCloudsPhrase'
 import { getDewPoint } from '../../helpers/getDewPoint'
+import SpinnerIcon from '../ui/icons/SpinnerIcon.vue'
+import TheHeader from '../ui/TheHeader.vue'
 
 export default defineComponent({
-  components: { WindIcon, PressureIcon },
+  components: { TheHeader, SpinnerIcon, WindIcon, PressureIcon },
   props: {
     city: {
       type: Object as PropType<CityWeather>,
+      required: true,
+    },
+    isLoading: {
+      type: Boolean,
       required: true,
     },
   },
@@ -58,7 +67,7 @@ export default defineComponent({
     },
 
     windDirection() {
-      return getWindDirection(this.city.detail.wind.speed)
+      return getWindDirection(this.city.detail.wind.deg)
     },
     windPhase() {
       return getWindPhrase(this.city.detail.wind.speed)

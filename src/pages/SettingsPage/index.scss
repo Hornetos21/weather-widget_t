@@ -1,18 +1,16 @@
 // SETTINGS PAGE
-.settings-container {
-}
-
 .form {
   display: flex;
   flex-direction: column;
   gap: 10px;
 
-  padding: 15px 0;
+  padding: 26px 0;
 
   label {
     width: 102px;
   }
 }
+
 .form-input {
   display: flex;
   align-items: center;
@@ -39,6 +37,7 @@
     }
   }
 }
+
 .settings-list {
   margin-bottom: 60px;
 
@@ -54,11 +53,13 @@
     &:not(&:last-child) {
       margin-bottom: 30px;
     }
+
     button {
       margin-left: auto;
     }
   }
 }
+
 .search-list {
   position: absolute;
   width: 100%;
@@ -84,4 +85,8 @@
       border-bottom: 1px solid black;
     }
   }
+}
+
+.move {
+  cursor: grab;
 }

@@ -6,9 +6,11 @@
   margin: 0;
   box-sizing: border-box;
 }
+
 ul {
   list-style: none;
 }
+
 .root {
   max-width: 375px;
   min-width: 320px;
@@ -19,37 +21,38 @@ ul {
 
   background: #e4e4e4;
 }
+
 .widget-container {
   position: relative;
-
+  height: 100%;
   border: 2px solid black;
   border-radius: 4px;
 
   font-size: 1.6em;
+}
 
-  padding: 0 26px 10px;
+.container {
+  padding: 0 26px;
 }
 
 .title {
   font-size: inherit;
   font-weight: 600;
 }
+
 .header {
   display: flex;
   align-items: center;
   height: 75px;
-
-  &--message {
-    height: 40px;
-    margin-bottom: 15px;
-  }
 }
+
 .spinner {
   position: absolute;
   left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
-
+  z-index: 3;
   backdrop-filter: blur(4px);
 
   display: flex;
@@ -57,23 +60,26 @@ ul {
   align-items: center;
 }
 
-.block {
-  padding: 10px;
-  background: #fbfbfb;
-  border-radius: 4px;
-
-  &--alert {
-    margin-top: 75px;
-  }
-
-  p {
-    padding: 0 15px;
-  }
+.message-wrapper {
+  padding-bottom: 26px;
 }
+
+.message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 15px;
+  border-radius: 4px;
+  background: #fbfbfb;
+}
+
 .btn {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 
   height: 30px;
   width: 30px;
@@ -92,6 +98,7 @@ ul {
   .icon {
     color: black;
     transition: color 0.2s;
+
     &:hover {
       color: darkcyan;
     }
@@ -102,6 +109,5 @@ ul {
   }
 }
 
-@import '@/pages/MainPage';
 @import '@/pages/SettingsPage';
 @import '@/components/WeatherCard';
