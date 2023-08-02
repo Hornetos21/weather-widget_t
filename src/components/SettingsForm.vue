@@ -32,9 +32,11 @@
 import EnterArrow from './ui/icons/EnterArrow.vue'
 import TheButton from './ui/TheButton.vue'
 import PlusIcon from './ui/icons/PlusIcon.vue'
-import { CoordinatesByName } from '../types'
+
 import { debounce } from '../helpers/debounce'
 import { getCoordinatesByCityName } from '../services/api/OpenWeatherApi'
+
+import { CoordinatesByName } from '../types'
 
 export default {
   components: { PlusIcon, TheButton, EnterArrow },
@@ -64,6 +66,8 @@ export default {
       }
     },
     addLocation(event, city) {
+      if (!this.searchCity.trim()) return
+
       if (event.type === 'submit') {
         if (this.searchList.length) {
           this.$emit('select', this.searchList[0])
@@ -86,14 +90,6 @@ export default {
     searchCity(...args) {
       this.debouncedFetch(...args)
     },
-    /*    searchCity(...args) {
-      this.performSearch(...args)
-    },*/
   },
 }
 </script>
-
-<!--/*(newVal, oldVal) => {-->
-<!--console.log('value changed: ', newVal, oldVal)-->
-<!--//   API fetch-->
-<!--}*/-->

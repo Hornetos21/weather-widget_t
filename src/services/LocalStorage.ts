@@ -1,13 +1,9 @@
 import { CityWeather } from '../types'
 
-const id = 1
-
-const localStorageKey = `weather-widget-${id} `
-
-export const loadLocalStorage = () =>
-  JSON.parse(localStorage.getItem(localStorageKey))
-    ? JSON.parse(localStorage.getItem(localStorageKey))
+export const loadLocalStorage = (key: string) =>
+  JSON.parse(localStorage.getItem(key))
+    ? JSON.parse(localStorage.getItem(key))
     : []
 
-export const saveLocalStorage = (cites: CityWeather) =>
-  localStorage.setItem(localStorageKey, JSON.stringify(cites))
+export const saveLocalStorage = (key: string, data: CityWeather) =>
+  localStorage.setItem(key, JSON.stringify(data))

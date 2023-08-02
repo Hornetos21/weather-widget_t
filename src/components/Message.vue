@@ -17,7 +17,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import CodeOrange from './ui/icons/CodeOrange.vue'
+import CodeOrange from './ui/icons/CodeOrangeIcon.vue'
 import SpinnerIcon from './ui/icons/SpinnerIcon.vue'
 import TheHeader from './ui/TheHeader.vue'
 

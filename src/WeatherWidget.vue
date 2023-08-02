@@ -13,15 +13,17 @@
         <Message v-if="!cities.length || error">
           <template v-slot:icon>
             <SpinnerIcon v-show="isLoading" />
-            <CodeOrange size="40" v-show="message && !error" />
-            <CodeRed size="40" v-show="error" />
+            <CodeOrangeIcon size="40" v-show="message && !error" />
+            <CodeRedIcon size="40" v-show="error" />
           </template>
           <template v-slot:message>{{ error || message }}</template>
         </Message>
 
-        <div class="spinner" v-if="isLoading">
-          <SpinnerIcon />
-        </div>
+        <!--SPINNER-->
+
+        <!--        <div class="spinner" v-if="isLoading">-->
+        <!--          <SpinnerIcon />-->
+        <!--        </div>-->
 
         <WeatherList
           v-if="!isSettingsMode"
@@ -33,7 +35,7 @@
         />
       </div>
 
-      <!--      SETTING-->
+      <!--      SETTING -->
       <SettingsPage
         :cities="cities"
         v-if="isSettingsMode"
@@ -42,46 +44,36 @@
         :is-settings-mode="isSettingsMode"
         :showError="showError"
         :error="error"
+        :reorder="reorderCities"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent } from 'vue'
+
 import SettingsPage from './pages/SettingsPage/SettingsPage.vue'
 import GearIcon from './components/ui/icons/GearIcon.vue'
 import CloseIcon from './components/ui/icons/CloseIcon.vue'
 import TheButton from './components/ui/TheButton.vue'
 import SpinnerIcon from './components/ui/icons/SpinnerIcon.vue'
-import CodeOrange from './components/ui/icons/CodeOrange.vue'
-import CodeRed from './components/ui/icons/CodeRed.vue'
+import CodeOrangeIcon from './components/ui/icons/CodeOrangeIcon.vue'
+import CodeRedIcon from './components/ui/icons/CodeRedIcon.vue'
+import Message from './components/Message.vue'
+import WeatherList from './components/WeatherList.vue'
 
 import { getWeatherByLocation } from './services/api/OpenWeatherApi'
-import {
-  getCurrentCoordinates,
-  getCurrentPosition,
-} from './services/getCurrentLocation'
-import { extractLocalCityWeather } from './helpers/extractLocalCity'
+import { getCurrentCoordinates } from './services/getCurrentLocation'
 import { loadLocalStorage, saveLocalStorage } from './services/LocalStorage'
-import { CityWeather } from './types'
-import WeatherList from './components/WeatherList.vue'
-import Message from './components/Message.vue'
-
-/*
- * Поиск по городу обработка на клин и энтер
- * Сообщения ошибок и спинер
- * Проверить направление ветра а то показывает подозрительно на север
- * Попробовать сохранять координаты в локалстор
- * Попробовать генерировать айдишник при создании приложения сохранять его в локал
- * */
+import { extractLocalCityWeather } from './helpers/extractLocalCity'
 
 export default defineComponent({
   components: {
-    CodeRed,
+    CodeOrangeIcon,
     Message,
     WeatherList,
-    CodeOrange,
+    CodeRedIcon,
     SpinnerIcon,
     TheButton,
     CloseIcon,
@@ -95,28 +87,38 @@ export default defineComponent({
       isSettingsMode: false,
       isLoading: false,
       timerId: null,
+      weatherId: 'weather-widget-1',
 
       message: '',
       error: '',
     }
   },
   methods: {
-    reorderCities() {},
-    addCity() {},
+    reorderCities(sorted) {
+      this.cities = sorted
+    },
+    addCity(city) {
+      const cityWeather = extractLocalCityWeather(city)
+
+      this.cities.push(cityWeather)
+    },
     removeCity(city) {
       this.cities = this.cities.filter((el) => el.id !== city.id)
     },
+
     toggleMode() {
       this.isSettingsMode = !this.isSettingsMode
     },
+
     showError(error: string) {
       this.error = error
       setTimeout(() => (this.error = ''), 2000)
     },
-    updateWeather() {
-      const updateTime = 5 * 60 * 1000
 
-      this.timerId = setInterval(this.fetchWeather, updateTime)
+    updateWeather() {
+      const update5min = 5 * 60 * 1000
+
+      this.timerId = setInterval(this.fetchWeather, update5min)
     },
 
     async fetchWeatherByCurrentCoords() {
@@ -124,8 +126,6 @@ export default defineComponent({
 
       if (typeof res === 'string') {
         this.error = res
-
-        // !refactor
 
         setTimeout(() => {
           this.error = ''
@@ -159,7 +159,6 @@ export default defineComponent({
     },
 
     async fetchAndAdd(cityName) {
-      console.log(cityName)
       const isExist = this.cities.some(
         (el) => el.coords.lat.toFixed(2) === cityName.lat.toFixed(2)
       )
@@ -171,8 +170,7 @@ export default defineComponent({
             cityName.lat,
             cityName.lon
           )
-
-          this.cities.push(extractLocalCityWeather(cityWeather))
+          this.addCity(cityWeather)
         } catch (e) {
           console.error(e.message)
           this.showError('Failed to load city')
@@ -181,12 +179,11 @@ export default defineComponent({
     },
   },
   async mounted() {
-    this.cities = loadLocalStorage()
+    this.cities = loadLocalStorage(this.weatherId)
 
-    // this.updateWeather()
+    this.updateWeather()
 
     if (this.cities.length) {
-      // this.message = ''
       await this.fetchWeather()
     } else {
       this.message = `Please click on the allow access to your location data button or add a city in the settings.`
@@ -196,30 +193,13 @@ export default defineComponent({
       this.message = 'Add a city in the settings.'
     }
   },
-  computed: {
-    // isExist(city) {
-    //   return this.cities.some((el) => el.id === city.id)
-    // },
-    /*    welcomePhase() {
-          return this.welcome
-            ? 'Please click on the allow access to your location data button or add a city in the settings.'
-            : 'Add a city in the settings.'
-        },*/
-  },
   watch: {
     cities: {
       handler() {
-        saveLocalStorage(this.cities)
+        saveLocalStorage(this.weatherId, this.cities)
       },
       deep: true,
     },
-    /*message: {
-      handler() {
-        if (!this.cities.length) {
-          this.message = 'Add a city in the settings.'
-        }
-      },
-    },*/
   },
 })
 </script>

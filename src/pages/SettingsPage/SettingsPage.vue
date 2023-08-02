@@ -1,10 +1,11 @@
 <template>
   <div class="container">
     <the-header>Settings</the-header>
+
     <Message v-if="!cities.length || error" :is-settings-mode="isSettingsMode">
       <template v-slot:icon>
-        <CodeOrange size="40" v-if="!error" />
-        <CodeRed size="40" v-else />
+        <CodeOrangeIcon size="40" v-if="!error" />
+        <CodeRedIcon size="40" v-else />
       </template>
       <template v-slot:message
         >{{
@@ -13,7 +14,8 @@
         }}
       </template>
     </Message>
-    <SettingsList :cities="cities" @remove="removeCity" />
+
+    <SettingsList :cities="cities" @remove="removeCity" @reorder="reorder" />
     <SettingsForm :cities="cities" @select="fetchAndAdd" @error="showError" />
   </div>
 </template>
@@ -25,8 +27,8 @@ import SettingsForm from '@/components/SettingsForm.vue'
 import SettingsList from '@/components/SettingsList.vue'
 import Message from '@/components/Message.vue'
 import TheHeader from '@/components/ui/TheHeader.vue'
-import CodeOrange from '@/components/ui/icons/CodeOrange.vue'
-import CodeRed from '@/components/ui/icons/CodeRed.vue'
+import CodeOrangeIcon from '@/components/ui/icons/CodeOrangeIcon.vue'
+import CodeRedIcon from '@/components/ui/icons/CodeRedIcon.vue'
 
 export default defineComponent({
   name: 'SettingPage',
@@ -35,8 +37,8 @@ export default defineComponent({
     SettingsForm,
     SettingsList,
     Message,
-    CodeOrange,
-    CodeRed,
+    CodeOrangeIcon,
+    CodeRedIcon,
   },
   props: {
     cities: {
@@ -60,13 +62,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    reorder: {
+      type: Function,
+      required: true,
+    },
   },
-  // methods: {
-  //   remove(city) {
-  //     removeCity()
-  //   },
-  // },
 })
 </script>
-
-<!--el.id !== city.id-->

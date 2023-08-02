@@ -1,14 +1,13 @@
 // WEATHER MAIN
 .weather-list {
-  //min-height: 526px;
 }
+
 .weather-card {
   position: relative;
   min-height: 526px;
-  //min-width: 320px;
-  //margin-bottom: 70px;
+
   &:not(&:first-child) {
-    margin-top: 70px;
+    margin-top: 30px;
     border-top: 2px solid black;
   }
 
@@ -26,10 +25,12 @@
       font-weight: 600;
     }
   }
+
   .short-details {
     display: block;
     margin-bottom: 30px;
   }
+
   .long-details {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

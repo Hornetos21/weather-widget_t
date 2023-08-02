@@ -15,8 +15,7 @@
       <div class="main-info__temperature">{{ city.main.temp }} °C</div>
     </div>
     <em class="short-details">
-      Feels like {{ city.main.feels }} °C. {{ formatClouds }}.
-      {{ windPhase }}
+      {{ weatherShortPhase }}
     </em>
     <div class="long-details">
       <div class="long-details__prop">
@@ -37,16 +36,18 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from 'vue'
+
 import PressureIcon from '../ui/icons/PressureIcon.vue'
 import WindIcon from '../ui/icons/WindIcon.vue'
-import { CityWeather } from '../../types'
-import { defineComponent, PropType } from 'vue'
-import { getWindDirection } from '../../helpers/getWindDirection'
-import { getWindPhrase } from '../../helpers/getWindPhrase'
-import { getCloudsPhrase } from '../../helpers/getCloudsPhrase'
-import { getDewPoint } from '../../helpers/getDewPoint'
 import SpinnerIcon from '../ui/icons/SpinnerIcon.vue'
 import TheHeader from '../ui/TheHeader.vue'
+
+import { getWindDirection } from '../../helpers/getWindDirection'
+import { getWindPhrase } from '../../helpers/getWindPhrase'
+import { getDewPoint } from '../../helpers/getDewPoint'
+
+import { CityWeather } from '../../types'
 
 export default defineComponent({
   components: { TheHeader, SpinnerIcon, WindIcon, PressureIcon },
@@ -62,8 +63,8 @@ export default defineComponent({
   },
   computed: {
     weatherShortPhase() {
-      return `Feels like ${this.city.main.feels} °C. {{ formatClouds }}.
-      {{ windPhase }}`
+      return `Feels like ${this.city.main.feels} °C.  ${this.formatClouds}.
+      ${this.windPhase}`
     },
 
     windDirection() {

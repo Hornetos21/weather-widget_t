@@ -36,9 +36,6 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
-    // error:{
-    //   type: String
-    // },
     message: {
       type: String,
     },
