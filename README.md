@@ -4,6 +4,8 @@
 
 ## Description
 
+[Live Widget](https://hornetos21.github.io/weather-widget_t/)
+
 ### ☀ Features
 
 - User can add this widget to any html page inside tag `<body>`
@@ -11,7 +13,7 @@
 ```html
 
 <weather-widget></weather-widget>
-<script type='text/javascript' src=''></script>
+<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/Hornetos21/weather-widget_t@main/docs/app.bundle.js'></script>
 ```
 
 - Request user geo location
