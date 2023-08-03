@@ -66,7 +66,7 @@ export default defineComponent({
       isSettingsMode: false,
       isLoading: false,
       timerId: null,
-      weatherId: 'weather-widget-1',
+      weatherId: 'weather-docs-1',
 
       message: '',
       error: '',
