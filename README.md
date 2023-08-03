@@ -1,5 +1,7 @@
 # Weather Widget - Web component on Vue 3
 
+![Frame 2.webp](public%2FFrame%202.webp)
+
 ## Description
 
 ### ☀ Features
