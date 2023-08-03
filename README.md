@@ -40,6 +40,14 @@
 ``` 
     yarn install or npm install
 ```
+### Setup
+- Get API key in the site [OpenWeatherAPI](https://openweathermap.org/)
+- Create file .env and paste your API key
+  ```
+    NODE_ENV=development
+    API_KEY={ YOUR API KEY }  
+  ``` 
+
 
 ### Compiles and hot-reloads for development
 
