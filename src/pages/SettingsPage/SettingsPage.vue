@@ -4,21 +4,16 @@
 
     <Message v-if="!cities.length || error" :is-settings-mode="isSettingsMode">
       <template v-slot:icon>
-        <CodeOrangeIcon size="40" v-if="!error" />
-        <CodeRedIcon size="40" v-else />
+        <CodeOrangeIcon v-if="!error" />
+        <CodeRedIcon v-else />
       </template>
-      <template v-slot:message
-        >{{
-          error ||
-          'Please enter the name of the city, where you want to find out the weather.'
-        }}
-      </template>
+      <template v-slot:message>{{ messagePhrase }}</template>
     </Message>
 
     <SettingsList :cities="cities" @remove="removeCity" @reorder="reorder" />
     <SettingsForm
       :cities="cities"
-      @select="fetchWeatherByName"
+      @selected="fetchWeatherByName"
       @error="showError"
     />
   </div>
@@ -69,6 +64,14 @@ export default defineComponent({
     reorder: {
       type: Function,
       required: true,
+    },
+  },
+  computed: {
+    messagePhrase() {
+      return (
+        this.error ||
+        'Please enter the name of the city, where you want to find out the weather.'
+      )
     },
   },
 })

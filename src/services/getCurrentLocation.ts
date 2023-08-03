@@ -1,3 +1,5 @@
+import { CityCoords } from '../types'
+
 export function getCurrentPosition(): Promise<GeolocationCoordinates> {
   try {
     return new Promise((resolve, reject) => {
@@ -11,7 +13,7 @@ export function getCurrentPosition(): Promise<GeolocationCoordinates> {
   }
 }
 
-export async function getCurrentCoordinates() {
+export async function getCurrentCoordinates(): Promise<CityCoords> {
   try {
     const coordinates = await getCurrentPosition()
     return {
@@ -20,7 +22,6 @@ export async function getCurrentCoordinates() {
     }
   } catch (e) {
     console.error(e.message)
-    return 'It is not possible to determine your geolocation'
+    throw new Error('It is not possible to determine your geolocation')
   }
-  // }
 }

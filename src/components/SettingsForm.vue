@@ -65,17 +65,18 @@ export default {
         console.error(e.message)
       }
     },
+
     addLocation(event: Event, city: CoordinatesByName) {
       if (!this.searchCity.trim()) return
 
       if (event.type === 'submit') {
         if (this.searchList.length) {
-          this.$emit('select', this.searchList[0])
+          this.$emit('selected', this.searchList[0])
         } else {
           this.$emit('error', "Couldn't find the city.")
         }
       } else {
-        this.$emit('select', city)
+        this.$emit('selected', city)
       }
 
       this.searchList = []

@@ -22,7 +22,7 @@
 defineProps({
   size: {
     type: String,
-    required: true,
+    default: '50',
   },
 })
 </script>

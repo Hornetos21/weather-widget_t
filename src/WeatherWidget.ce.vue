@@ -105,17 +105,18 @@ export default defineComponent({
     },
 
     async fetchWeatherByCurrentCoords() {
-      const res = await getCurrentCoordinates()
+      try {
+        this.isLoading = true
+        const res = await getCurrentCoordinates()
 
-      if (typeof res === 'string') {
-        this.error = res
+        await this.fetchWeather(res)
+      } catch (e) {
+        this.error = e.message
 
         setTimeout(() => {
           this.error = ''
           this.isSettingsMode = true
         }, 2000)
-      } else {
-        await this.fetchWeather(res)
       }
     },
 
@@ -145,6 +146,7 @@ export default defineComponent({
       const isExist = this.cities.some(
         (el) => el.coords.lat.toFixed(2) === cityName.lat.toFixed(2)
       )
+
       if (isExist) {
         return this.showError('This city is already on the list.')
       } else {
@@ -172,7 +174,7 @@ export default defineComponent({
       this.message = `Please click on the allow access to your location data button or add a city in the settings.`
 
       await this.fetchWeatherByCurrentCoords()
-
+      this.isLoading = false
       this.message = 'Add a city in the settings.'
     }
   },

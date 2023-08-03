@@ -3,8 +3,8 @@
     <Message v-if="!cities.length || error">
       <template v-slot:icon>
         <SpinnerIcon v-show="isLoading" />
-        <CodeOrangeIcon size="40" v-show="message && !error" />
-        <CodeRedIcon size="40" v-show="error" />
+        <CodeOrangeIcon v-show="message && !error && !isLoading" />
+        <CodeRedIcon v-show="error" />
       </template>
       <template v-slot:message>{{ error || message }}</template>
     </Message>
