@@ -9,17 +9,14 @@
       </p>
     </div>
   </div>
-
-  <!--  <div class="spinner" v-if="isLoading">-->
-  <!--    <SpinnerIcon />-->
-  <!--  </div>-->
 </template>
 
 <script>
 import { defineComponent } from 'vue'
-import CodeOrange from './ui/icons/CodeOrangeIcon.vue'
-import SpinnerIcon from './ui/icons/SpinnerIcon.vue'
-import TheHeader from './ui/TheHeader.vue'
+
+import CodeOrange from '@/components/ui/icons/CodeOrangeIcon.vue'
+import SpinnerIcon from '@/components/ui/icons/SpinnerIcon.vue'
+import TheHeader from '@/components/ui/TheHeader.vue'
 
 export default defineComponent({
   components: { TheHeader, SpinnerIcon, CodeOrange },

@@ -1,5 +1,5 @@
 <template>
-  <form class="form" @submit.prevent="addLocation">
+  <form class="form" @submit.prevent="addLocation($event, _)">
     <label class="title" for="city">Add location:</label>
     <div class="form-input">
       <div class="wrapper-input">
@@ -14,7 +14,7 @@
           <li
             class="search-list__item"
             v-for="city in searchList"
-            @click="addLocation(_, city)"
+            @click="addLocation($event, city)"
           >
             {{ city.name }}, {{ city.country }}
             <PlusIcon />
@@ -65,7 +65,7 @@ export default {
         console.error(e.message)
       }
     },
-    addLocation(event, city) {
+    addLocation(event: Event, city: CoordinatesByName) {
       if (!this.searchCity.trim()) return
 
       if (event.type === 'submit') {

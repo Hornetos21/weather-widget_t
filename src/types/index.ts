@@ -1,4 +1,4 @@
-interface CityCoords {
+export interface CityCoords {
   lat: number
   lon: number
 }
@@ -38,6 +38,7 @@ export interface OpenWeatherAPI {
     all: number
   }
 }
+
 interface CityMainWeather extends Omit<MainWeather, 'id'> {
   clouds: number
   feels: number
@@ -50,6 +51,7 @@ interface CityDetailWeather {
   wind: WindDetail
   visibility: number
 }
+
 export interface CityWeather {
   id: number
   name: string
@@ -58,8 +60,6 @@ export interface CityWeather {
   main: CityMainWeather
   detail: CityDetailWeather
 }
-
-//
 
 export interface CoordinatesByName extends CityCoords {
   name: string

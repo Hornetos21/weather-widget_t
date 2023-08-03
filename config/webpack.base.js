@@ -1,8 +1,11 @@
 const path = require('path')
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 
-const { DefinePlugin } = require('webpack')
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 const __base = path.resolve(__dirname, '..')
 const __src = path.resolve(__base, 'src')
@@ -12,9 +15,10 @@ module.exports = {
     app: path.resolve(__src, 'main.ts'),
   },
   plugins: [
-    new DefinePlugin({
+    new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false,
+      'process.env': JSON.stringify(process.env),
     }),
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({

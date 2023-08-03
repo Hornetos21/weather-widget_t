@@ -6,41 +6,22 @@
         <GearIcon v-else />
       </the-button>
 
-      <!--      <div class="skeleton"></div>-->
-
       <!-- WEATHER -->
-      <div class="container" v-if="!isSettingsMode">
-        <Message v-if="!cities.length || error">
-          <template v-slot:icon>
-            <SpinnerIcon v-show="isLoading" />
-            <CodeOrangeIcon size="40" v-show="message && !error" />
-            <CodeRedIcon size="40" v-show="error" />
-          </template>
-          <template v-slot:message>{{ error || message }}</template>
-        </Message>
+      <MainPage
+        :error="error"
+        :message="message"
+        :is-settings-mode="isSettingsMode"
+        :is-loading="isLoading"
+        :cities="cities"
+        :toggle-mode="toggleMode"
+      />
 
-        <!--SPINNER-->
-
-        <!--        <div class="spinner" v-if="isLoading">-->
-        <!--          <SpinnerIcon />-->
-        <!--        </div>-->
-
-        <WeatherList
-          v-if="!isSettingsMode"
-          :cities="cities"
-          :toggle-mode="toggleMode"
-          :is-settings-mode="isSettingsMode"
-          :is-loading="isLoading"
-          :message="message"
-        />
-      </div>
-
-      <!--      SETTING -->
+      <!-- SETTING -->
       <SettingsPage
         :cities="cities"
         v-if="isSettingsMode"
         :removeCity="removeCity"
-        :fetch-and-add="fetchAndAdd"
+        :fetch-weather-by-name="fetchWeatherByName"
         :is-settings-mode="isSettingsMode"
         :showError="showError"
         :error="error"
@@ -51,30 +32,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
-import SettingsPage from './pages/SettingsPage/SettingsPage.vue'
-import GearIcon from './components/ui/icons/GearIcon.vue'
-import CloseIcon from './components/ui/icons/CloseIcon.vue'
-import TheButton from './components/ui/TheButton.vue'
-import SpinnerIcon from './components/ui/icons/SpinnerIcon.vue'
-import CodeOrangeIcon from './components/ui/icons/CodeOrangeIcon.vue'
-import CodeRedIcon from './components/ui/icons/CodeRedIcon.vue'
-import Message from './components/Message.vue'
-import WeatherList from './components/WeatherList.vue'
+import MainPage from '@/pages/MainPage.vue'
+import SettingsPage from '@/pages/SettingsPage/SettingsPage.vue'
+import GearIcon from '@/components/ui/icons/GearIcon.vue'
+import CloseIcon from '@/components/ui/icons/CloseIcon.vue'
+import TheButton from '@/components/ui/TheButton.vue'
 
 import { getWeatherByLocation } from './services/api/OpenWeatherApi'
 import { getCurrentCoordinates } from './services/getCurrentLocation'
 import { loadLocalStorage, saveLocalStorage } from './services/LocalStorage'
 import { extractLocalCityWeather } from './helpers/extractLocalCity'
+import {
+  CityCoords,
+  CityWeather,
+  CoordinatesByName,
+  OpenWeatherAPI,
+} from './types'
 
 export default defineComponent({
   components: {
-    CodeOrangeIcon,
-    Message,
-    WeatherList,
-    CodeRedIcon,
-    SpinnerIcon,
+    MainPage,
     TheButton,
     CloseIcon,
     GearIcon,
@@ -83,7 +62,7 @@ export default defineComponent({
 
   data() {
     return {
-      cities: [],
+      cities: [] as PropType<CityWeather>[],
       isSettingsMode: false,
       isLoading: false,
       timerId: null,
@@ -94,16 +73,20 @@ export default defineComponent({
     }
   },
   methods: {
-    reorderCities(sorted) {
+    reorderCities(sorted: CityWeather[]) {
       this.cities = sorted
     },
-    addCity(city) {
+    addCity(city: OpenWeatherAPI) {
       const cityWeather = extractLocalCityWeather(city)
 
       this.cities.push(cityWeather)
     },
-    removeCity(city) {
+    removeCity(city: CityWeather) {
       this.cities = this.cities.filter((el) => el.id !== city.id)
+
+      if (!this.cities.length) {
+        this.message = 'Add a city in the settings.'
+      }
     },
 
     toggleMode() {
@@ -136,7 +119,7 @@ export default defineComponent({
       }
     },
 
-    async fetchWeather(coordinates?) {
+    async fetchWeather(coordinates?: CityCoords) {
       const cityCoords = this.cities.length
         ? this.cities
         : [{ coords: coordinates }]
@@ -145,7 +128,7 @@ export default defineComponent({
         this.isLoading = true
 
         const weatherApi = await Promise.all(
-          cityCoords.map((city) =>
+          cityCoords.map((city: CityWeather) =>
             getWeatherByLocation(city.coords.lat, city.coords.lon)
           )
         )
@@ -158,7 +141,7 @@ export default defineComponent({
       }
     },
 
-    async fetchWeatherByName(cityName) {
+    async fetchWeatherByName(cityName: CoordinatesByName) {
       const isExist = this.cities.some(
         (el) => el.coords.lat.toFixed(2) === cityName.lat.toFixed(2)
       )

@@ -1,7 +1,4 @@
 export function getCurrentPosition(): Promise<GeolocationCoordinates> {
-  // if (!navigator.geolocation) {
-  //   return 'Your browser does not support geolocation...'
-  // } else {
   try {
     return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(

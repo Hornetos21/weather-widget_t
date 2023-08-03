@@ -1,17 +1,12 @@
-<!--@drop.prevent="onDrop($event, 'listCities')"
-@dragover.prevent="onDragOver($event)"
-@dragleave.prevent-->
-
 <template>
   <ul class="settings-list" v-if="cities.length">
     <li
+      class="settings-list__item"
       v-for="city in cities"
       :key="city.id"
       draggable="true"
       @dragstart="startDrag($event, city)"
       @drop.prevent="onDrop($event, city)"
-      @dragenter="dragEnter($event)"
-      @dragend="dragEnd($event)"
       @dragover.prevent="onDragOver($event, city)"
       @dragleave.prevent="dragLeave($event)"
     >
@@ -27,9 +22,9 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 
-import DNDIcon from './ui/icons/DNDIcon.vue'
-import TheButton from './ui/TheButton.vue'
-import TrashIcon from './ui/icons/TrashIcon.vue'
+import DNDIcon from '@/components/ui/icons/DNDIcon.vue'
+import TheButton from '@/components/ui/TheButton.vue'
+import TrashIcon from '@/components/ui/icons/TrashIcon.vue'
 
 import { CityWeather } from '../types'
 
@@ -43,13 +38,13 @@ export default defineComponent({
   },
   data() {
     return {
-      sortedCities: [],
-      currentCity: null,
+      sortedCities: [] as PropType<CityWeather>[],
+      currentCity: null as PropType<CityWeather>,
     }
   },
   methods: {
-    sortingCities(currentCity, overCity) {
-      this.sortedCities = this.cities.map((el) => {
+    sortingCities<T extends CityWeather>(currentCity: T, overCity: T) {
+      this.sortedCities = this.cities.map((el: T) => {
         if (el.id === overCity.id) {
           return { ...currentCity }
         }
@@ -60,34 +55,29 @@ export default defineComponent({
       })
     },
 
-    removeCity(city) {
+    removeCity(city: CityWeather) {
       this.$emit('remove', city)
     },
 
-    startDrag(e: DragEvent, currentCity) {
+    startDrag(e: DragEvent, currentCity: CityWeather) {
       this.currentCity = currentCity
 
       e.dataTransfer.dropEffect = 'move'
       e.dataTransfer.effectAllowed = 'move'
-      e.dataTransfer.setData('itemID', currentCity.id)
     },
-    onDrop(e: DragEvent, overCity) {
+    onDrop(e: DragEvent, overCity: CityWeather) {
       e.currentTarget.style.background = '#c8c8c8'
 
-      const itemID = +e.dataTransfer.getData('itemID')
       this.sortingCities(this.currentCity, overCity)
       this.$emit('reorder', this.sortedCities)
     },
-    onDragOver(e: DragEvent, city) {
-      // e.currentTarget.style.background = '#1a86d8'
+    onDragOver(e: DragEvent, city: CityWeather) {
       e.currentTarget.style.background = 'darkcyan'
     },
 
-    dragLeave(e) {
+    dragLeave(e: DragEvent) {
       e.currentTarget.style.background = '#c8c8c8'
     },
-    dragEnter(e) {},
-    dragEnd(e) {},
   },
 })
 </script>

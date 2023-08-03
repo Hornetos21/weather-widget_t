@@ -12,10 +12,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import WeatherCard from './WeatherCard/WeatherCard.vue'
-import CloseIcon from './ui/icons/CloseIcon.vue'
-import GearIcon from './ui/icons/GearIcon.vue'
+import { defineComponent, PropType } from 'vue'
+
+import WeatherCard from '@/components/WeatherCard/WeatherCard.vue'
+import CloseIcon from '@/components/ui/icons/CloseIcon.vue'
+import GearIcon from '@/components/ui/icons/GearIcon.vue'
+
+import { CityWeather } from '../types'
 
 export default defineComponent({
   components: {
@@ -25,7 +28,7 @@ export default defineComponent({
   },
   props: {
     cities: {
-      type: Array,
+      type: Array as PropType<CityWeather[]>,
       required: true,
     },
     isLoading: {

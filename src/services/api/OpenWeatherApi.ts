@@ -1,10 +1,6 @@
-// require('dotenv').config()
-
-// const API_KEY = process.env.API_KEY
-
 import { CoordinatesByName, OpenWeatherAPI } from '../../types'
 
-const apiKey = 'bcc2478cdccc5312ce2ed41e284dec9c'
+const apiKey = process.env.API_KEY
 const urlApi = 'https://api.openweathermap.org/'
 
 export const getWeatherByLocation = async (

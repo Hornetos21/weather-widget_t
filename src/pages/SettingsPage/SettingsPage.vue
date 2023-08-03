@@ -16,7 +16,11 @@
     </Message>
 
     <SettingsList :cities="cities" @remove="removeCity" @reorder="reorder" />
-    <SettingsForm :cities="cities" @select="fetchAndAdd" @error="showError" />
+    <SettingsForm
+      :cities="cities"
+      @select="fetchWeatherByName"
+      @error="showError"
+    />
   </div>
 </template>
 
@@ -48,7 +52,7 @@ export default defineComponent({
     removeCity: {
       type: Function,
     },
-    fetchAndAdd: {
+    fetchWeatherByName: {
       type: Function,
     },
     isSettingsMode: {

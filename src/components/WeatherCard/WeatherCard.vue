@@ -1,6 +1,6 @@
 <template>
   <li class="weather-card">
-    <div class="spinner" v-if="isLoading">
+    <div class="spinner-container" v-if="isLoading">
       <SpinnerIcon />
     </div>
 
@@ -10,7 +10,6 @@
       <img
         :src="`https://openweathermap.org/img/wn/${city.main.icon}@2x.png`"
         :alt="city.main.main"
-        width="100"
       />
       <div class="main-info__temperature">{{ city.main.temp }} °C</div>
     </div>
@@ -38,10 +37,10 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 
-import PressureIcon from '../ui/icons/PressureIcon.vue'
-import WindIcon from '../ui/icons/WindIcon.vue'
-import SpinnerIcon from '../ui/icons/SpinnerIcon.vue'
-import TheHeader from '../ui/TheHeader.vue'
+import PressureIcon from '@/components/ui/icons/PressureIcon.vue'
+import WindIcon from '@/components/ui/icons/WindIcon.vue'
+import SpinnerIcon from '@/components/ui/icons/SpinnerIcon.vue'
+import TheHeader from '@/components/ui/TheHeader.vue'
 
 import { getWindDirection } from '../../helpers/getWindDirection'
 import { getWindPhrase } from '../../helpers/getWindPhrase'
@@ -63,7 +62,7 @@ export default defineComponent({
   },
   computed: {
     weatherShortPhase() {
-      return `Feels like ${this.city.main.feels} °C.  ${this.formatClouds}.
+      return `Feels like ${this.city.main.feels} °C. ${this.formatClouds}.
       ${this.windPhase}`
     },
 
