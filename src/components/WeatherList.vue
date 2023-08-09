@@ -15,15 +15,11 @@
 import { defineComponent, PropType } from 'vue'
 
 import WeatherCard from '@/components/WeatherCard/WeatherCard.vue'
-import CloseIcon from '@/components/ui/icons/CloseIcon.vue'
-import GearIcon from '@/components/ui/icons/GearIcon.vue'
 
 import { CityWeather } from '../types'
 
 export default defineComponent({
   components: {
-    GearIcon,
-    CloseIcon,
     WeatherCard,
   },
   props: {
@@ -34,13 +30,6 @@ export default defineComponent({
     isLoading: {
       type: Boolean,
       required: true,
-    },
-    isSettingsMode: {
-      type: Boolean,
-      required: true,
-    },
-    message: {
-      type: String,
     },
   },
 })
